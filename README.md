@@ -5,6 +5,8 @@ most of the code is just a hack... enjoy ;-)
 
 # how it works
 
+basic idea is that the rust code acts as backend and javascript plus html as frontend. the backend sends strings as response to the frontend.
+
 the main rust code is under the src folder. the www folder contains the html and javascript (and plumbing code required for wasm-bindgen). 
 
 # how to deploy 
