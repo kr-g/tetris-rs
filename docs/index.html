@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>tetris-rs</title>
+  </head>
+  <body style="font-family: monospace; font-weight: bold;">
+
+    <div style="padding: 1em; font-size: 2em;">
+        TETRIS
+    </div>
+
+    <a href="https://github.com/kr-g/tetris-rs" target="_blank">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub">
+    </a>
+    <div style="overflow: auto;">
+        <div style="float:left;">
+            <canvas id="canvasboard" ></canvas>
+        </div>
+        <div style="overflow: auto;">
+            <div>
+                <div >
+                    <canvas style="padding-left: 3em;" id="canvasboard2" ></canvas>
+                </div>
+                <div style="padding-left: 3em; ">
+                    <div style="padding-top: 1em; font-size: 2em;" id="score">
+                        score
+                    </div>
+                    <div style="padding-top: 2em; ">
+                        <div style="float: left; " >
+                            <button id="reset" >reset</button>
+                        </div>
+                        <div style="float: left; padding-left: 1em; " >
+                            <button id="stopplay" >pause / play (p)</button>
+                        </div>                             
+                    </div>
+                    <div style="padding-top: 3em; ">
+                        <div style="float: left; " >
+                            <button id="left" style="width: 4em; height: 4em;" ><<</button>
+                        </div>
+                        <div style="float: left; padding-left: 1em;" >
+                            <button id="turn" style="width: 4em; height: 4em;" >^^</button>
+                        </div>                             
+                        <div style="float: left; padding-left: 1em;" >
+                            <button id="right" style="width: 4em; height: 4em;" >>></button>
+                        </div>                             
+                    </div>
+                    <div style="padding-top: 5em; padding-left: 5em;" >
+                        <div >
+                            <button id="down" style="width: 4em; height: 4em;" >vv</button>
+                        </div>                             
+                    </div>                             
+                </div>
+            </div>
+            <div id="pause-label" style="display: none;">
+                <div style="padding-top: 1em; font-size: 3em; color: red; padding-left: 1em; " >
+                    <div>PAUSE</div><div style="padding-top: 1em; font-size: 0.5em;">press p again</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+    use cursor keys to move. space or cursor-up to turn
+    </div>
+
+    <script type="text/javascript">
+
+        function $id( id ){
+            return document.getElementById(id);
+        }
+
+        var canvas = $id("canvasboard");
+        var ctx = canvas.getContext("2d");
+        var canvas2 = $id("canvasboard2");
+        var ctx2 = canvas2.getContext("2d");
+
+        const cell_size = 20;
+        const cell_x = 10;
+        const cell_y = 24;
+        const world_x = cell_size * cell_x;
+        const world_y = cell_size * cell_y;
+
+        const col = [ "#000000", "#ff0000", "#00ff00", 
+                      "#0000ff", "#ffff00", "#00ffff", 
+                      "#ff00ff", "#ffffff", "#ffffff", 
+                      "#ffffff" ];
+
+        function clearBoard() {
+          canvas.width = world_x;
+          canvas.height = world_y;
+          ctx.fillStyle = "#000000";
+          ctx.fillRect(0, 0, world_x * cell_size, world_y * cell_size);
+        }
+
+        function clearBoard2() {
+          canvas2.width = cell_size * 4;
+          canvas2.height = cell_size * 2;
+          ctx2.fillStyle = "#000000";
+          ctx2.fillRect(0, 0, cell_size * 4, cell_size * 2 );
+        }
+
+        clearBoard();
+        clearBoard2();
+
+        function drawctx(ctx, x, y, state) {
+          ctx.fillStyle = col[state];
+          ctx.fillRect(x * cell_size+1, y * cell_size+1, cell_size-2, cell_size-2);
+        }
+
+        function drawstone(x, y, state) {
+          drawctx(ctx, x, y, state)
+        }
+
+        function drawstone2(x, y, state) {
+          drawctx(ctx2, x, y, state)
+        }
+
+        function drawBoard( inp ){
+            clearBoard();
+            var i = 0;
+            for( var y = 0 ; y < cell_y ; ++y ){
+                for( var x = 0 ; x < cell_x ; ++x ){
+                    var code = inp.charCodeAt(i)-48;
+                    ++i;
+                    if( code > 0 )
+                        drawstone( x, y, code );
+                }
+            }
+         }
+
+        function log(msg){
+            //console.log(msg);
+        }
+
+        function drawScore( s ){
+            $id("score").innerHTML = s;
+        }
+
+        function drawNextStone( s ){
+
+            clearBoard2();
+
+            var xd = parseInt( s[0] );
+            var yd = parseInt( s[1] );
+
+            var inp = s.substr( 2 );
+
+            var i = 0;
+            for( var y = 0 ; y < yd ; ++y ){
+                for( var x = 0 ; x < xd ; ++x ){
+                    var code = inp.charCodeAt(i)-48;
+                    ++i;
+                    if( code > 0 )
+                        drawstone2( x, y, code );
+               }
+            }
+        }
+
+    </script>
+    <script src="./bootstrap.js"></script>
+
+  </body>
+</html>
