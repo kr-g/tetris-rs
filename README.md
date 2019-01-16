@@ -26,3 +26,6 @@ https://rustwasm.github.io/book/
 
 https://rustwasm.github.io/wasm-bindgen/introduction.html
 
+# read the full article
+
+https://another-software-development-blog.blogspot.com/2019/01/the-tetris-game-tour-into-rust-and-web.html
